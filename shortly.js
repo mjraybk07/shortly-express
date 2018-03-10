@@ -43,7 +43,8 @@ function(req, res) {
 app.post('/links', 
 function(req, res) {
   var uri = req.body.url;
-
+  console.log('this is uri: ', uri);
+  
   if (!util.isValidUrl(uri)) {
     console.log('Not a valid url: ', uri);
     return res.sendStatus(404);
@@ -65,6 +66,7 @@ function(req, res) {
           baseUrl: req.headers.origin
         })
         .then(function(newLink) {
+          console.log("newLink..........========...........>>>>>>", newLink);
           res.status(200).send(newLink);
         });
       });
@@ -75,6 +77,17 @@ function(req, res) {
 /************************************************************/
 // Write your authentication routes here
 /************************************************************/
+
+app.get('/login', 
+function(req, res) {
+  res.render('login');
+});
+
+app.get('/logout', 
+function(req, res) {
+  // todo implement delete link ???
+  res.render('login');
+});
 
 
 
