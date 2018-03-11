@@ -66,7 +66,7 @@ function(req, res) {
           baseUrl: req.headers.origin
         })
         .then(function(newLink) {
-          console.log("newLink..........========...........>>>>>>", newLink);
+          // console.log('this is the newLink: ', newLink)
           res.status(200).send(newLink);
         });
       });
@@ -89,6 +89,14 @@ function(req, res) {
   res.render('login');
 });
 
+
+// get sign up page form
+app.get('/signup', 
+function(req, res) {
+  res.render('signup');
+});
+
+// post sign up submit 
 
 
 /************************************************************/
