@@ -74,6 +74,7 @@ function(req, res) {
   });
 });
 
+
 /************************************************************/
 // Write your authentication routes here
 /************************************************************/
@@ -98,6 +99,43 @@ function(req, res) {
 
 // post sign up submit 
 
+app.post('/signup', 
+function(req, res) {
+  var username = req.body.username;
+  var password = req.body.password;
+  
+  console.log('POST: this is username: ', username);
+  console.log('POST: this is password: ', password);
+  
+
+  new User({ username: username }).fetch().then(function(found) {
+    if (found) {
+      console.log('Username already exists. Redirecting to login page..')
+      res.redirect('login');
+      
+    } else {
+      // get salt and hashed password (salt + original password)
+      // create user object with user, salt and hashed pw
+      
+      util.getUrlTitle(uri, function(err, title) {
+        if (err) {
+          console.log('Error reading URL heading: ', err);
+          return res.sendStatus(404);
+        }
+
+        Users.create({
+          username: username,
+          password: password,
+          salt: 'salt_TODO'
+        })
+        .then(function(newLink) {
+          // console.log('this is the newLink: ', newLink)
+          res.status(200).send(newLink);
+        });
+      });
+    }
+  });
+});
 
 /************************************************************/
 // Handle the wildcard route last - if all other routes fail
