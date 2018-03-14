@@ -7,6 +7,9 @@ var knex = require('knex')({
   useNullAsDefault: true
 });
 var db = require('bookshelf')(knex);
+// db.knex.schema.dropTable('users').then(function(table){
+// console.log('removed', table);
+// });
 
 db.knex.schema.hasTable('urls').then(function(exists) {
   if (!exists) {
