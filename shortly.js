@@ -3,7 +3,9 @@ var util = require('./lib/utility');
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
 var bcrypt = require('bcrypt-nodejs');
-
+var cookieParser = require('cookie-parser');
+var session = require('express-session');
+var morgan = require('morgan');
 
 var db = require('./app/config');
 var Users = require('./app/collections/users');
@@ -14,6 +16,9 @@ var Click = require('./app/models/click');
 
 var app = express();
 
+// set morgan to log info about our requests for development use.
+app.use(morgan('dev'));
+
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
 app.use(partials());
@@ -23,6 +28,18 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(__dirname + '/public'));
 
+
+// initialize cookie-parser to allow us access the cookies stored in the browser. 
+app.use(cookieParser());
+
+// initialize express-session to allow us track the logged-in user across sessions.
+app.use(session({
+  key: 'user_sid',
+  secret: 'somerandomstuff',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {secure: true}
+}));
 
 app.get('/', 
 function(req, res) {
@@ -67,7 +84,7 @@ function(req, res) {
           baseUrl: req.headers.origin
         })
         .then(function(newLink) {
-          // console.log('this is the newLink: ', newLink)
+          console.log('this is the newLink: ', newLink)
           res.status(200).send(newLink);
         });
       });
@@ -84,6 +101,25 @@ app.get('/login',
 function(req, res) {
   res.render('login');
 });
+
+// handle a login page submit
+app.post('/login', 
+function(req, res) {
+  // var username = req.body.username;
+  // var password = req.body.password;
+  // check the user ( req , callback ) => true or false
+  util.checkUser(req )
+    
+  // if valid user
+  //   create a session
+  //   direct user to ... ??? link ??? page  
+      res.render('index');
+      
+  // if not valid user
+  //   redirect to signup page
+  //res.redirect('signup');
+});
+
 
 app.get('/logout', 
 function(req, res) {
