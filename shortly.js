@@ -108,7 +108,7 @@ function(req, res) {
   // var username = req.body.username;
   // var password = req.body.password;
   // check the user ( req , callback ) => true or false
-  util.checkUser(req )
+  util.checkUser(req );
     
   // if valid user
   //   create a session
